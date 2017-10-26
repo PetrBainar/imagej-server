@@ -1,7 +1,7 @@
 // React requires
-var React = require('react');
-var ReactDOM = require('react-dom');
-var $ = require('jquery');
+let React = require('react');
+let ReactDOM = require('react-dom');
+let $ = require('jquery');
 
 // Consts
 const HOST = 'http://localhost:8080';
@@ -65,7 +65,7 @@ class App extends React.Component {
 		// Find the image rotation module
 		$.getJSON(HOST + DIR_MODULES, function(data) {
 			for (let module of data) {
-				if (module.slice(module.lastIndexOf('.') + 1).localeCompare(ROTATION_MODULE_NAME) == 0) {
+				if (module.slice(module.lastIndexOf('.') + 1).localeCompare(ROTATION_MODULE_NAME) === 0) {
 					moduleId = module;
 					break;
 				}
@@ -76,7 +76,7 @@ class App extends React.Component {
 	}
 
 	uploadImage() {
-		if (this.uploadImageJQuery() == true)
+		if (this.uploadImageJQuery() === true)
 			this.refreshImage(); // Refresh if there is a result to be seen
 	}
 
@@ -85,7 +85,7 @@ class App extends React.Component {
 
 		// Select an image file
 		let files = $('#imageSelection').prop('files');
-		if (files.length != 1) {
+		if (files.length !== 1) {
 			alert(`Need exactly 1 file to upload (has ${files.length})`);
 			return;
 		}
@@ -103,7 +103,7 @@ class App extends React.Component {
 			success: function() {
 				success = true;
 			}
-		})
+		});
 
 		return success;
 	}
@@ -119,7 +119,7 @@ class App extends React.Component {
 
 		let date = new Date();
 		let time = date.getTime();
-		var lastImageId = null;
+		let lastImageId = null;
 
 		// Get id of the last image on the server
 		$.getJSON(HOST + DIR_OBJECTS, function(data) {
@@ -132,7 +132,7 @@ class App extends React.Component {
 	}
 
 	rotateImage() {
-		if (this.rotateImageJQuery() == true)
+		if (this.rotateImageJQuery() === true)
 			this.refreshImage(); // Refresh if there is a result to be seen
 	}
 
