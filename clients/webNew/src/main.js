@@ -1,3 +1,4 @@
+// React requires
 var React = require('react');
 var ReactDOM = require('react-dom');
 var $ = require('jquery');
@@ -16,18 +17,19 @@ class App extends React.Component {
 			imageId: null,
 			refreshTime: null
 		};
-		
+
 		// These bindings are needed to make 'this' working in the callback
 		this.findImageRotationModule = this.findImageRotationModule.bind(this);
 		this.uploadImage = this.uploadImage.bind(this);
 		this.refreshImage = this.refreshImage.bind(this);
 		this.rotateImage = this.rotateImage.bind(this);
-		
+
 		this.findImageRotationModuleJQuery = this.findImageRotationModuleJQuery.bind(this);
 		this.uploadImageJQuery = this.uploadImageJQuery.bind(this);
 		this.refreshImageJQuery = this.refreshImageJQuery.bind(this);
-	}	
-	
+		this.rotateImageJQuery = this.rotateImageJQuery.bind(this);
+	}
+
 	render() {
 		return (
 			<div>
@@ -42,26 +44,27 @@ class App extends React.Component {
 				<button id="imageRefresh" onClick={this.refreshImage}>Refresh image</button>
 				<span>{this.state.refreshTime}</span>
 				<br />
-				<button id="imageRotation" onClick={this.rotateImage}>Rotate image</button>				
+				<button id="imageRotation" onClick={this.rotateImage}>Rotate image</button>
 				<br />
 				<img src={`${HOST}${DIR_OBJECTS}/${this.state.imageId}/jpg?timestamp=${this.state.refreshTime}`} />
 			</div>
-		);		
+		);
 	}
-	
+
 	findImageRotationModule() {
 		this.findImageRotationModuleJQuery();
 	}
-	
-	findImageRotationModuleJQuery() {	
+
+	findImageRotationModuleJQuery() {
 		$.ajaxSetup({
 			async: false
 		});
-				
-		var moduleId = null;
-		
-		$.getJSON(HOST + DIR_MODULES, function(data, status) {
-			for (let module of data) {								
+
+		let moduleId = null;
+
+		// Find the image rotation module
+		$.getJSON(HOST + DIR_MODULES, function(data) {
+			for (let module of data) {
 				if (module.slice(module.lastIndexOf('.') + 1).localeCompare(ROTATION_MODULE_NAME) == 0) {
 					moduleId = module;
 					break;
@@ -69,16 +72,18 @@ class App extends React.Component {
 			}
 		});
 
-		this.setState(() => ({imageRotationModuleId: moduleId}));		
+		this.setState(() => ({imageRotationModuleId: moduleId}));
 	}
-		
+
 	uploadImage() {
-		this.uploadImageJQuery();
+		if (this.uploadImageJQuery() == true)
+			this.refreshImage(); // Refresh if there is a result to be seen
 	}
-	
-	uploadImageJQuery() {		
+
+	uploadImageJQuery() {
 		let success = false;
-		
+
+		// Select an image file
 		let files = $('#imageSelection').prop('files');
 		if (files.length != 1) {
 			alert(`Need exactly 1 file to upload (has ${files.length})`);
@@ -86,7 +91,8 @@ class App extends React.Component {
 		}
 		let data = new FormData();
 		data.append('file', files[0]);
-				
+
+		// Upload the selected image to the server
 		$.ajax({
 			url: HOST + DIR_OBJECTS + '/upload',
 			type: 'POST',
@@ -94,67 +100,64 @@ class App extends React.Component {
 			cache: false,
 			contentType: false,
 			processData: false,
-			success: function(rtn, status, xhr) {
+			success: function() {
 				success = true;
-			},
-			error: function(xhr, status, err) {
-				// TODO: better error handling
-				;
 			}
 		})
-		
-		if (success == true) {
-			this.refreshImage();
-		}
+
+		return success;
 	}
-	
+
 	refreshImage() {
 		this.refreshImageJQuery();
 	}
-	
+
 	refreshImageJQuery() {
 		$.ajaxSetup({
 			async: false
 		});
-		
+
 		let date = new Date();
 		let time = date.getTime();
 		var lastImageId = null;
-		
+
+		// Get id of the last image on the server
 		$.getJSON(HOST + DIR_OBJECTS, function(data) {
 			for (let id of data) {
 				lastImageId = id;
 			}
 		});
-		
+
 		this.setState(() => ({imageId: lastImageId, refreshTime: time.toString()}));
 	}
-	
+
 	rotateImage() {
+		if (this.rotateImageJQuery() == true)
+			this.refreshImage(); // Refresh if there is a result to be seen
+	}
+
+	rotateImageJQuery() {
 		let success = false;
-		
-		var jsonInputs = new Object;
-		
-		jsonInputs['context'] = '';
-		jsonInputs['dataset'] = this.state.imageId;
-		jsonInputs['angle'] = 90;
-		jsonInputs['datasetService'] = '';		
-		
-		// make POST request for execution
+		let jsonInputs = {
+			context: null,
+			dataset: this.state.imageId,
+			angle: 90,
+			datasetService: null
+		};
+
+		// Post prepared inputs to the server
 		$.ajax({
 			type: 'POST',
 			url: HOST + DIR_MODULES + '/' + this.state.imageRotationModuleId.toString(),
 			data: JSON.stringify(jsonInputs),
 			dataType: 'json',
 			contentType: 'application/json',
-			success: function(outputs, status) {
+			success: function() {
 				success = true;
-			},		
+			},
 		});
-		
-		if (success == true) {
-			this.refreshImage();
-		}
+
+		return success;
 	}
 }
 
