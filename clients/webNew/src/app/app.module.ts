@@ -4,16 +4,26 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 
-import { JsonComponent } from './json.component';
+import { ModuleListComponent } from './module-list.component';
+import { ObjectListComponent } from './object-list.component';
+
+import { AppRoutingModule } from './app-routing.module';
+
+import { JsonService } from './json.service';
 
 @NgModule({
   imports: [
     BrowserModule,
-    HttpClientModule
+    HttpClientModule,
+    AppRoutingModule
   ],
   declarations: [
     AppComponent,
-    JsonComponent
+    ModuleListComponent,
+    ObjectListComponent
+  ],
+  providers: [
+    JsonService
   ],
   bootstrap: [ AppComponent ]
 })
