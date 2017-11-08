@@ -11,4 +11,8 @@ export class JsonService {
   getJsonData(url: string): Observable<Array<string>> {
     return this.http.get(url);
   }
+
+  postFormData(url: string, formData: FormData): Observable<Object> {
+    return this.http.post(url, formData);
+  }
 }
