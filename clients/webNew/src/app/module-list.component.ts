@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
-import { JsonService } from './json.service';
+import { ModuleService } from './module.service';
+
 import { FijiModule } from './fiji-module';
 
 @Component({
@@ -10,23 +11,15 @@ import { FijiModule } from './fiji-module';
 
 export class ModuleListComponent implements OnInit {
 
-  private modulesUrl = 'http://localhost:8080/modules';
-
   availableModules: Array<FijiModule>;
 
-  constructor(private jsonService: JsonService) {
-    this.availableModules = new Array<FijiModule>();
+  constructor(private moduleService: ModuleService) {
+    this.moduleService.listUpdated.subscribe(list => {
+      this.availableModules = list;
+    });
   }
 
   ngOnInit(): void {
-    this.jsonService.getJsonData(this.modulesUrl)
-      .subscribe(results => this.composeModuleInformation(results));
-  }
-
-  composeModuleInformation(results: string[]) {
-    const component = this;
-    results.forEach((value: string, i: number) => {
-      component.availableModules.push(new FijiModule(i, value));
-    });
+    this.moduleService.fetchModules();
   }
 }

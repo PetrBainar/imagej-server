@@ -9,7 +9,9 @@ import { ObjectListComponent } from './object-list.component';
 
 import { AppRoutingModule } from './app-routing.module';
 
+import { ModuleService } from './module.service';
 import { JsonService } from './json.service';
+import { ObjectService } from './object.service';
 
 @NgModule({
   imports: [
@@ -23,6 +25,8 @@ import { JsonService } from './json.service';
     ObjectListComponent
   ],
   providers: [
+    ModuleService,
+    ObjectService,
     JsonService
   ],
   bootstrap: [ AppComponent ]

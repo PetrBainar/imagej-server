@@ -1,6 +1,6 @@
 <div>List of available modules</div>
 <ul>
-  <li *ngFor="let module of availableModules">
+  <li *ngFor="let module of moduleService.availableModules">
     <b>{{ module.id }}</b> {{ module.type }} <b>{{ module.clazz }}</b> {{ module.source }}
   </li>
 </ul>

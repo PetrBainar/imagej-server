@@ -1,6 +1,7 @@
-import { Component, OnInit, ElementRef, ViewChild  } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 
-import { JsonService } from './json.service';
+import { ObjectService } from './object.service';
+
 import { FijiObject } from './fiji-object';
 
 @Component({
@@ -12,45 +13,26 @@ import { FijiObject } from './fiji-object';
 export class ObjectListComponent implements OnInit {
 
   @ViewChild('fileInput') fileInputElementRef: ElementRef;
-
-  private objectsUrl = 'http://localhost:8080/objects';
-  private objectsUrlUpload = 'http://localhost:8080/objects/upload';
-
-  timestamp: number;
   uploadedObjects: Array<FijiObject>;
 
-  constructor(private jsonService: JsonService) {
-    this.uploadedObjects = [];
+  constructor(private objectService: ObjectService) {
+    this.objectService.listUpdated.subscribe(list => {
+      this.uploadedObjects = list;
+    });
   }
 
   ngOnInit(): void {
-    this.retrieveObjects();
-  }
-
-  retrieveObjects(): void {
-    this.uploadedObjects = [];
-    this.jsonService.getJsonData(this.objectsUrl)
-      .subscribe((results: string[]) => {
-        const component = this;
-        component.timestamp = new Date().getTime();
-        results.forEach((result: string) => {
-          component.uploadedObjects.push(new FijiObject(this.objectsUrl, result, this.timestamp));
-        });
-      });
+    this.objectService.fetchObjects();
   }
 
   uploadImage() {
     const files = this.fileInputElementRef.nativeElement['files'];
-
     if (files.length !== 1) {
       alert('Need exactly one file to upload!');
       return;
     }
-
-    const formData = new FormData();
-    formData.append('file', files[0]);
-
-    this.jsonService.postFormData(this.objectsUrlUpload, formData)
-      .subscribe(null, null, () => this.retrieveObjects());
+    this.objectService.uploadObject(files[0]);
   }
 }
+
+
