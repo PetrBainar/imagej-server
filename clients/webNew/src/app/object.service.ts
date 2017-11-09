@@ -14,9 +14,7 @@ export class ObjectService {
 
   listUpdated: EventEmitter<Array<FijiObject>> = new EventEmitter();
 
-  constructor(private jsonService: JsonService) {
-    this.fetchObjects();
-  }
+  constructor(private jsonService: JsonService) {  }
 
   uploadObject(file: File): void {
     const formData = new FormData();
@@ -32,7 +30,7 @@ export class ObjectService {
       .subscribe((results: string[]) => {
         const component = this;
         results.forEach((result: string) => {
-          component.uploadedObjects.push(new FijiObject(this.objectsUrl, result, this.timestamp));
+          component.uploadedObjects.push(new FijiObject(component.objectsUrl, result, component.timestamp));
         });
         this.updateListeners();
       });

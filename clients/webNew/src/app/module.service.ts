@@ -1,8 +1,9 @@
-import {Injectable, EventEmitter} from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 
 import { JsonService } from './json.service';
 
 import { FijiModule } from './fiji-module';
+import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class ModuleService {
@@ -12,9 +13,7 @@ export class ModuleService {
 
   listUpdated: EventEmitter<Array<FijiModule>> = new EventEmitter();
 
-  constructor(private jsonService: JsonService) {
-    this.fetchModules();
-  }
+  constructor(private jsonService: JsonService) {  }
 
   fetchModules(): void {
     this.availableModules = [];
@@ -26,6 +25,16 @@ export class ModuleService {
         });
         this.updateListeners();
       });
+  }
+
+  executeModule(moduleName: string, inputs: Object): Observable<Object> {
+    return this.jsonService.postObject(`${this.modulesUrl}/${moduleName}`, inputs);
+  }
+
+  findImageRotationModuleId(): string {
+    const imageRotationModule: FijiModule =
+      this.availableModules.find((item: FijiModule) => (item.clazz === 'RotateImageXY'));
+    return imageRotationModule.rawName;
   }
 
   private updateListeners(): void {
