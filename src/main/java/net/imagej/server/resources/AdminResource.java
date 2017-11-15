@@ -21,24 +21,25 @@
 
 package net.imagej.server.resources;
 
-import io.dropwizard.setup.Environment;
-
-import net.imagej.legacy.IJ1Helper;
-import net.imagej.legacy.LegacyService;
-import net.imagej.server.services.JsonService;
-
 import java.awt.Menu;
 import java.awt.MenuBar;
 import java.awt.MenuItem;
-import java.util.LinkedList;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import javax.inject.Inject;
-import javax.ws.rs.GET;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+
+import io.dropwizard.setup.Environment;
+import net.imagej.legacy.IJ1Helper;
+import net.imagej.legacy.LegacyService;
+import net.imagej.server.services.JsonService;
 
 /**
  * Resource for administration.
@@ -63,28 +64,27 @@ public class AdminResource {
 		IJ1Helper helper = legacyService.getIJ1Helper(); 
 		MenuBar menuBar = helper.getMenuBar();
 		
-		LinkedList<String> list = new LinkedList<String>();
+		Map<String,Object> map = new LinkedHashMap<>();
 		
 		for (int it = 0; it < menuBar.getMenuCount(); it++) {
-			list.addAll(getMenuRecursively(menuBar.getMenu(it)));
+			map.put(menuBar.getMenu(it).getLabel(),getMenuRecursively(menuBar.getMenu(it)));
 		}
 		
-		return jsonService.parseObject(list);
+		return jsonService.parseObject(map);
 	}
 	
-	private LinkedList<String> getMenuRecursively(Menu menu) {
-		LinkedList<String> list = new LinkedList<String>();
-		list.add(menu.getLabel());
+	private Map<String, Object> getMenuRecursively( Menu menu) {
+		Map<String, Object> result = new LinkedHashMap<>();
 		for (int it = 0; it < menu.getItemCount(); it++) {
 			MenuItem menuItem = menu.getItem(it);
 			if (menuItem instanceof Menu) {
-				list.addAll(getMenuRecursively((Menu)menuItem));
+				result.put(menuItem.getLabel(),getMenuRecursively((Menu)menuItem));
 			}
 			else {
-				list.add(menuItem.getLabel());
+				result.put(menuItem.getLabel(), Collections.emptyMap());
 			}
 		}
-		return list;
+		return result;
 	}
 
 	/**
