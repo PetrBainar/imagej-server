@@ -65,23 +65,24 @@ public class AdminResource {
 		MenuBar menuBar = helper.getMenuBar();
 		
 		Map<String,Object> map = new LinkedHashMap<>();
-		
+		map.put("Level", 0);
+		map.put("Label", "Root");
+				
 		for (int it = 0; it < menuBar.getMenuCount(); it++) {
-			map.put(menuBar.getMenu(it).getLabel(),getMenuRecursively(menuBar.getMenu(it)));
+			map.put("Child"+it, getMenuRecursively(1, menuBar.getMenu(it)));
 		}
 		
 		return jsonService.parseObject(map);
 	}
 	
-	private Map<String, Object> getMenuRecursively( Menu menu) {
+	private Map<String, Object> getMenuRecursively(int level, MenuItem menuItem) {
 		Map<String, Object> result = new LinkedHashMap<>();
-		for (int it = 0; it < menu.getItemCount(); it++) {
-			MenuItem menuItem = menu.getItem(it);
-			if (menuItem instanceof Menu) {
-				result.put(menuItem.getLabel(),getMenuRecursively((Menu)menuItem));
-			}
-			else {
-				result.put(menuItem.getLabel(), Collections.emptyMap());
+		result.put("Level", level);
+		result.put("Label", menuItem.getLabel());
+		if (menuItem instanceof Menu) {
+			Menu menu = (Menu)menuItem;
+			for (int it = 0; it < menu.getItemCount(); it++) {
+				result.put("Child"+it, getMenuRecursively(level+1, menu.getItem(it)));
 			}
 		}
 		return result;

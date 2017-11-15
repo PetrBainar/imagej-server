@@ -1,0 +1,11 @@
+<div class="btn-group" dropdown *ngFor="let levelOneChild of retrievedMenuRoot.children">
+  <button dropdownToggle type="button" class="btn btn-primary dropdown-toggle">
+    {{levelOneChild.label}}<span class="caret"></span>
+  </button>
+  <ul *dropdownMenu class="dropdown-menu" role="menu">
+    <ng-template ngFor let-levelTwoChild [ngForOf]="levelOneChild.children">
+      <li *ngIf="levelTwoChild.label !== '-'" role="menuitem"><a class="dropdown-item" href="#">{{levelTwoChild.label}}</a></li>
+      <li *ngIf="levelTwoChild.label === '-'" class="divider dropdown-divider"></li>
+    </ng-template>
+  </ul>
+</div>
