@@ -1,11 +1,42 @@
-<div class="btn-group" dropdown *ngFor="let levelOneChild of retrievedMenuRoot.children">
+<div dropdown class="btn-group" *ngFor="let levelOneChild of retrievedMenuRoot.children">
   <button dropdownToggle type="button" class="btn btn-primary dropdown-toggle">
     {{levelOneChild.label}}<span class="caret"></span>
   </button>
-  <ul *dropdownMenu class="dropdown-menu" role="menu">
+  <ul *dropdownMenu class="dropdown-menu">
     <ng-template ngFor let-levelTwoChild [ngForOf]="levelOneChild.children">
-      <li *ngIf="levelTwoChild.label !== '-'" role="menuitem"><a class="dropdown-item" href="#">{{levelTwoChild.label}}</a></li>
-      <li *ngIf="levelTwoChild.label === '-'" class="divider dropdown-divider"></li>
+      <div *ngIf="levelTwoChild.children.length === 0">
+        <li *ngIf="levelTwoChild.label !== '-'"><a class="dropdown-item" href="#">{{levelTwoChild.label}}</a></li>
+        <li *ngIf="levelTwoChild.label === '-'" class="divider dropdown-divider"></li>
+      </div>
+      <div *ngIf="levelTwoChild.children.length !== 0">
+        <li class="dropdown-submenu">
+          <a class="dropdown-toggle dropdown-item" href="#" data-toggle="dropdown">{{levelTwoChild.label}}</a>
+          <ul class="dropdown-menu">
+            <ng-template ngFor let-levelThreeChild [ngForOf]="levelTwoChild.children">
+              <div *ngIf="levelThreeChild.children.length === 0">
+                <li *ngIf="levelThreeChild.label !== '-'"><a class="dropdown-item" href="#">{{levelThreeChild.label}}</a></li>
+                <li *ngIf="levelThreeChild.label === '-'" class="divider dropdown-divider"></li>
+              </div>
+              <div *ngIf="levelThreeChild.children.length !== 0">
+                <li class="dropdown-submenu">
+                  <a class="dropdown-toggle dropdown-item" href="#" data-toggle="dropdown">{{levelThreeChild.label}}</a>
+                  <ul class="dropdown-menu">
+                    <ng-template ngFor let-levelFourChild [ngForOf]="levelThreeChild.children">
+                      <div *ngIf="levelFourChild.children.length === 0">
+                        <li *ngIf="levelFourChild.label !== '-'"><a class="dropdown-item" href="#">{{levelFourChild.label}}</a></li>
+                        <li *ngIf="levelFourChild.label === '-'" class="divider dropdown-divider"></li>
+                      </div>
+                      <div *ngIf="levelFourChild.children.length !== 0">
+                        <li><a class="dropdown-item" href="#" data-toggle="dropdown">CONSIDER MENU REFACTORING</a></li>
+                      </div>
+                    </ng-template>
+                  </ul>
+                </li>
+              </div>
+            </ng-template>
+          </ul>
+        </li>
+      </div>
     </ng-template>
   </ul>
 </div>
