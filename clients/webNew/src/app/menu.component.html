@@ -27,7 +27,33 @@
                         <li *ngIf="levelFourChild.label === '-'" class="divider dropdown-divider"></li>
                       </div>
                       <div *ngIf="levelFourChild.children.length !== 0">
-                        <li><a class="dropdown-item" href="#" data-toggle="dropdown">CONSIDER MENU REFACTORING</a></li>
+                        <li class="dropdown-submenu">
+                          <a class="dropdown-toggle dropdown-item" href="#" data-toggle="dropdown">{{levelFourChild.label}}</a>
+                          <ul class="dropdown-menu">
+                            <ng-template ngFor let-levelFiveChild [ngForOf]="levelFourChild.children">
+                              <div *ngIf="levelFiveChild.children.length === 0">
+                                <li *ngIf="levelFiveChild.label !== '-'"><a class="dropdown-item" href="#">{{levelFiveChild.label}}</a></li>
+                                <li *ngIf="levelFiveChild.label === '-'" class="divider dropdown-divider"></li>
+                              </div>
+                              <div *ngIf="levelFiveChild.children.length !== 0">
+                                <li class="dropdown-submenu">
+                                  <a class="dropdown-toggle dropdown-item" href="#" data-toggle="dropdown">{{levelFiveChild.label}}</a>
+                                  <ul class="dropdown-menu">
+                                    <ng-template ngFor let-levelSixChild [ngForOf]="levelFiveChild.children">
+                                      <div *ngIf="levelSixChild.children.length === 0">
+                                        <li *ngIf="levelSixChild.label !== '-'"><a class="dropdown-item" href="#">{{levelSixChild.label}}</a></li>
+                                        <li *ngIf="levelSixChild.label === '-'" class="divider dropdown-divider"></li>
+                                      </div>
+                                      <div *ngIf="levelSixChild.children.length !== 0">
+                                        <li><a class="dropdown-item" href="#" data-toggle="dropdown">CONSIDER MENU REFACTORING</a></li>
+                                      </div>
+                                    </ng-template>
+                                  </ul>
+                                </li>
+                              </div>
+                            </ng-template>
+                          </ul>
+                        </li>
                       </div>
                     </ng-template>
                   </ul>
