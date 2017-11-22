@@ -24,7 +24,6 @@ package net.imagej.server.resources;
 import java.awt.Menu;
 import java.awt.MenuBar;
 import java.awt.MenuItem;
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
