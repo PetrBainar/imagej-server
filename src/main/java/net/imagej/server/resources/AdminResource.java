@@ -24,7 +24,10 @@ package net.imagej.server.resources;
 import java.awt.Menu;
 import java.awt.MenuBar;
 import java.awt.MenuItem;
-import java.util.Collections;
+import java.awt.event.ActionListener;
+import javax.accessibility.AccessibleContext;
+
+import java.util.Hashtable;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -63,26 +66,29 @@ public class AdminResource {
 	public String menu() throws JsonProcessingException {
 		IJ1Helper helper = legacyService.getIJ1Helper(); 
 		MenuBar menuBar = helper.getMenuBar();
+		Hashtable<String, String> commandDictionary = helper.getCommands();
 		
 		Map<String,Object> map = new LinkedHashMap<>();
 		map.put("Level", 0);
 		map.put("Label", "Root");
+		map.put("Command", null);
 				
 		for (int it = 0; it < menuBar.getMenuCount(); it++) {
-			map.put("Child"+it, getMenuRecursively(1, menuBar.getMenu(it)));
+			map.put("Child"+it, getMenuRecursively(1, menuBar.getMenu(it), commandDictionary));
 		}
 		
 		return jsonService.parseObject(map);
 	}
 	
-	private Map<String, Object> getMenuRecursively(int level, MenuItem menuItem) {
+	private Map<String, Object> getMenuRecursively(int level, MenuItem menuItem, Hashtable<String, String> commandDictionary) {
 		Map<String, Object> result = new LinkedHashMap<>();
 		result.put("Level", level);
 		result.put("Label", menuItem.getLabel());
+		result.put("Command", commandDictionary.get(menuItem.getActionCommand()));
 		if (menuItem instanceof Menu) {
 			Menu menu = (Menu)menuItem;
 			for (int it = 0; it < menu.getItemCount(); it++) {
-				result.put("Child"+it, getMenuRecursively(level+1, menu.getItem(it)));
+				result.put("Child"+it, getMenuRecursively(level+1, menu.getItem(it), commandDictionary));
 			}
 		}
 		return result;
