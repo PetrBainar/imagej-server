@@ -6,7 +6,7 @@ import { FijiMenuItem } from './fiji-menu-item';
 @Injectable()
 export class MenuService {
 
-  private menuUrl = 'http://localhost:8080/admin/menu';
+  private menuUrl = 'http://localhost:8080/admin/menuNew';
   private retrievedMenuRoot: FijiMenuItem;
 
   menuUpdated: EventEmitter<FijiMenuItem> = new EventEmitter();
@@ -24,7 +24,7 @@ export class MenuService {
 
   private extractMenu(menuItemCandidate: Object): FijiMenuItem {
     const menuItem: FijiMenuItem = new FijiMenuItem(menuItemCandidate['Level'], menuItemCandidate['Label']);
-    for (const key of Object.keys(menuItemCandidate).filter(prop => prop !== 'Level' && prop !== 'Label')) {
+    for (const key of Object.keys(menuItemCandidate).filter(prop => prop !== 'Level' && prop !== 'Label' && prop !== 'Command')) {
       menuItem.AddChild(this.extractMenu(menuItemCandidate[key]));
     }
     return menuItem;

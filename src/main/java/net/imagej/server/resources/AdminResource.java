@@ -24,8 +24,6 @@ package net.imagej.server.resources;
 import java.awt.Menu;
 import java.awt.MenuBar;
 import java.awt.MenuItem;
-import java.awt.event.ActionListener;
-import javax.accessibility.AccessibleContext;
 
 import java.util.Hashtable;
 import java.util.LinkedHashMap;
@@ -44,6 +42,10 @@ import net.imagej.legacy.IJ1Helper;
 import net.imagej.legacy.LegacyService;
 import net.imagej.server.services.JsonService;
 
+import org.scijava.menu.MenuService;
+import org.scijava.menu.ShadowMenu;
+import org.scijava.module.ModuleInfo;
+
 /**
  * Resource for administration.
  * 
@@ -54,6 +56,9 @@ public class AdminResource {
 
 	@Inject
 	private LegacyService legacyService;
+	
+	@Inject
+	private MenuService menuService;
 	
 	@Inject
 	private JsonService jsonService;
@@ -68,7 +73,7 @@ public class AdminResource {
 		MenuBar menuBar = helper.getMenuBar();
 		Hashtable<String, String> commandDictionary = helper.getCommands();
 		
-		Map<String,Object> map = new LinkedHashMap<>();
+		Map<String, Object> map = new LinkedHashMap<>();
 		map.put("Level", 0);
 		map.put("Label", "Root");
 		map.put("Command", null);
@@ -91,6 +96,44 @@ public class AdminResource {
 				result.put("Child"+it, getMenuRecursively(level+1, menu.getItem(it), commandDictionary));
 			}
 		}
+		return result;
+	}
+	
+	@GET
+	@Path("menuNew")
+	public String menuNew() throws JsonProcessingException {
+		Map<String, Object> map = new LinkedHashMap<>();
+		map.put("Level", 0);
+		map.put("Label", "Root");
+		map.put("Command", null);
+		
+		int childrenCounter = 0;
+		for (ShadowMenu shadowMenu : menuService.getMenu().getChildren()) {
+			map.put("Child"+childrenCounter, getMenuNewRecursively(1, shadowMenu));
+			childrenCounter++;
+		}
+		
+		return jsonService.parseObject(map);
+	}
+	
+	private Map<String, Object> getMenuNewRecursively(int level, ShadowMenu shadowMenu) {
+		Map<String, Object> result = new LinkedHashMap<>();
+		result.put("Level", level);
+		result.put("Label", shadowMenu.getName());
+		
+		ModuleInfo moduleInfo = shadowMenu.getModuleInfo();
+		if (moduleInfo == null) {
+			result.put("Command", null);
+			int childrenCounter = 0;
+			for (ShadowMenu shadowSubMenu : shadowMenu.getChildren()) {
+				result.put("Child"+childrenCounter, getMenuNewRecursively(level+1, shadowSubMenu));
+				childrenCounter++;
+			}
+		}
+		else {
+			result.put("Command", moduleInfo.getDelegateClassName());
+		}
+		
 		return result;
 	}
 

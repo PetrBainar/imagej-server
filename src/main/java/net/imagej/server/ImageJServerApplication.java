@@ -46,6 +46,8 @@ import org.glassfish.hk2.utilities.binding.AbstractBinder;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.scijava.Context;
 
+import org.scijava.menu.MenuService;
+
 /**
  * Entry point to imagej-server.
  *
@@ -63,6 +65,8 @@ public class ImageJServerApplication extends
 	
 	private final LegacyService legacyService;
 	
+	private final MenuService menuService;
+	
 	private Environment env;
 
 	public ImageJServerApplication(final Context ctx) {
@@ -70,6 +74,7 @@ public class ImageJServerApplication extends
 		objectService = new DefaultObjectService();
 		jsonService = new DefaultJsonService(objectService);
 		legacyService = ctx.getService(LegacyService.class);
+		menuService = ctx.getService(MenuService.class);
 	}
 
 	@Override
@@ -127,6 +132,7 @@ public class ImageJServerApplication extends
 				bind(objectService).to(ObjectService.class);
 				bind(jsonService).to(JsonService.class);
 				bind(legacyService).to(LegacyService.class);
+				bind(menuService).to(MenuService.class);
 			}
 
 		});
