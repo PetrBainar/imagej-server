@@ -5,7 +5,6 @@ import { FijiMenuItem } from './fiji-menu-item';
 
 @Component({
   selector: 'app-component-menu',
-  styleUrls: ['./menu.component.css'],
   templateUrl: './menu.component.html'
 })
 

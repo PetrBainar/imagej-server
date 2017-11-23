@@ -8,6 +8,7 @@ import { AppComponent } from './app.component';
 import { ModuleListComponent } from './module-list.component';
 import { ObjectListComponent } from './object-list.component';
 import { MenuComponent } from './menu.component';
+import { MenuItemComponent } from './menu-item.component';
 
 import { AppRoutingModule } from './app-routing.module';
 
@@ -27,7 +28,8 @@ import { MenuService } from './menu.service';
     AppComponent,
     ModuleListComponent,
     ObjectListComponent,
-    MenuComponent
+    MenuComponent,
+    MenuItemComponent
   ],
   providers: [
     ModuleService,
