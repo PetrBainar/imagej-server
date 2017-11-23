@@ -1,9 +1,9 @@
-<ng-template ngFor let-menuItemChild [ngForOf]="menuItem.children">
-  <div *ngIf="menuItemChild.children.length === 0">
-    <li *ngIf="menuItemChild.label !== '-'"><a class="dropdown-item" href="#">{{menuItemChild.label}}</a></li>
+<ng-template ngFor let-menuItemChild [ngForOf]="menuItem?.children">
+  <div *ngIf="menuItemChild?.children.length === 0">
+    <li *ngIf="menuItemChild.label !== '-'" ><a class="dropdown-item" href="#" >{{menuItemChild.label}}</a></li>
     <li *ngIf="menuItemChild.label === '-'" class="divider dropdown-divider"></li>
   </div>
-  <div *ngIf="menuItemChild.children.length !== 0">
+  <div *ngIf="menuItemChild?.children.length !== 0">
     <li class="dropdown-submenu">
       <a class="dropdown-toggle dropdown-item" href="#" data-toggle="dropdown">{{menuItemChild.label}}</a>
       <ul class="dropdown-menu">
