@@ -31,7 +31,7 @@ export class ModuleService {
     return this.jsonService.postObject(`${this.modulesUrl}/${moduleName}`, inputs);
   }
 
-  findImageRotationModuleId(): string {
+  findImageRotationModule(): string {
     const imageRotationModule: FijiModule =
       this.availableModules.find((item: FijiModule) => (item.clazz === 'RotateImageXY'));
     return imageRotationModule.rawName;

@@ -24,6 +24,8 @@ export class MenuComponent implements OnInit, OnDestroy {
 
   @ViewChild('fileInput') fileInputElementRef: ElementRef;
   uploadedObjects: FijiObject[];
+  activeObjectId: string = null;
+
   availableModules: FijiModule[];
 
   constructor(
@@ -61,9 +63,23 @@ export class MenuComponent implements OnInit, OnDestroy {
   executeCommand(commandName: string) {
     const result: FijiModule = this.availableModules.find(module => module.rawName === 'command:' + commandName);
 
-    if (result !== null) {
-      alert('Wow! A module found! ' + result.rawName);
+    if (result === null) {
+      alert('No corresponding module found!');
+      return;
     }
+
+    if (this.activeObjectId === null) {
+      alert('No object has been selected as active!');
+    }
+
+    if (result.rawName === this.moduleService.findImageRotationModule()) {
+      const moduleInputs = {'context': null, 'dataset': this.activeObjectId, 'angle': 90, 'datasetService': null};
+      this.moduleService.executeModule(result.rawName, moduleInputs)
+        .subscribe(null, null, () => this.objectService.fetchObjects());
+      return;
+    }
+
+    alert(result.rawName + ' module found, rendering not implmented yet!');
   }
 
   uploadImage() {
@@ -75,9 +91,7 @@ export class MenuComponent implements OnInit, OnDestroy {
     this.objectService.uploadObject(files[0]);
   }
 
-  rotateImage(imageId: string) {
-    const moduleInputs = {'context': null, 'dataset': imageId, 'angle': 90, 'datasetService': null};
-    this.moduleService.executeModule(this.moduleService.findImageRotationModuleId(), moduleInputs)
-      .subscribe(null, null, () => this.objectService.fetchObjects());
+  setObjectActive(imageId: string) {
+    this.activeObjectId = imageId;
   }
 }

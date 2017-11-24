@@ -13,7 +13,7 @@
 <br><br>
 <div>List of uploaded objects</div>
 <div *ngFor="let object of uploadedObjects">
-  <div id="objectImgWrap">
-    <img id="objectImg" [src]="object.src" (click)="rotateImage(object.id)"/>
+  <div [ngClass]="'objectImgWrap'">
+    <img [ngClass]="(object.id == activeObjectId) ? 'objectImg redBorder' : 'objectImg'" [src]="object.src" (click)="setObjectActive(object.id)" />
   </div>
 </div>
