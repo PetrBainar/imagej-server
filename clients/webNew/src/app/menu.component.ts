@@ -8,6 +8,7 @@ import { NotificationService } from './notification.service';
 import { Subscription } from 'rxjs/Subscription';
 
 import { FijiObject } from './fiji-object';
+import { FijiModule } from './fiji-module';
 import { FijiMenuItem } from './fiji-menu-item';
 
 @Component({
@@ -22,7 +23,8 @@ export class MenuComponent implements OnInit, OnDestroy {
   retrievedMenuRoot: FijiMenuItem;
 
   @ViewChild('fileInput') fileInputElementRef: ElementRef;
-  uploadedObjects: Array<FijiObject>;
+  uploadedObjects: FijiObject[];
+  availableModules: FijiModule[];
 
   constructor(
     private objectService: ObjectService,
@@ -36,19 +38,32 @@ export class MenuComponent implements OnInit, OnDestroy {
         this.uploadedObjects = list;
       }));
     this.subscriptions.push(
+      this.moduleService.listUpdated.subscribe(list => {
+        this.availableModules = list;
+      }));
+    this.subscriptions.push(
       this.menuService.menuUpdated.subscribe((menuRoot: FijiMenuItem) => {
         this.retrievedMenuRoot = menuRoot;
       }));
     this.subscriptions.push(
       this.notificationService.menuItemClickedNotification.subscribe( (menuItem: FijiMenuItem) => {
-        alert(menuItem.command + ' has been clicked');
+        this.executeCommand(menuItem.command);
       }));
     this.objectService.fetchObjects();
+    this.moduleService.fetchModules();
     this.menuService.fetchMenu();
   }
 
   ngOnDestroy(): void {
     this.subscriptions.forEach(subscription => subscription.unsubscribe());
+  }
+
+  executeCommand(commandName: string) {
+    const result: FijiModule = this.availableModules.find(module => module.rawName === 'command:' + commandName);
+
+    if (result !== null) {
+      alert('Wow! A module found! ' + result.rawName);
+    }
   }
 
   uploadImage() {
