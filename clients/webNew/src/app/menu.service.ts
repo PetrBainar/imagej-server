@@ -23,7 +23,10 @@ export class MenuService {
   }
 
   private extractMenu(menuItemCandidate: Object): FijiMenuItem {
-    const menuItem: FijiMenuItem = new FijiMenuItem(menuItemCandidate['Level'], menuItemCandidate['Label']);
+    const menuItem: FijiMenuItem = new FijiMenuItem(
+      menuItemCandidate['Level'],
+      menuItemCandidate['Label'],
+      menuItemCandidate['Command']);
     for (const key of Object.keys(menuItemCandidate).filter(prop => prop !== 'Level' && prop !== 'Label' && prop !== 'Command')) {
       menuItem.AddChild(this.extractMenu(menuItemCandidate[key]));
     }

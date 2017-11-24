@@ -1,6 +1,8 @@
 import { Component, Input } from '@angular/core';
 import { FijiMenuItem } from './fiji-menu-item';
 
+import { NotificationService } from './notification.service';
+
 @Component({
   selector: 'app-component-menu-item',
   styleUrls: ['./menu-item.component.css'],
@@ -8,6 +10,14 @@ import { FijiMenuItem } from './fiji-menu-item';
 })
 
 export class MenuItemComponent {
-  @Input()
-  menuItem: FijiMenuItem;
+
+  @Input() menuItem: FijiMenuItem;
+
+  constructor(private notificationService: NotificationService) {
+    this.notificationService = notificationService;
+  }
+
+  updateListeners() {
+    this.notificationService.menuItemClicked(this.menuItem);
+  }
 }

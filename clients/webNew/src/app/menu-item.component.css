@@ -14,7 +14,7 @@
   display: block;
 }
 
-.dropdown-submenu > a::after {
+.dropdown-submenu > span::after {
   border-bottom: 0.3em solid transparent;
   border-left-color: inherit;
   border-left-style: solid;
@@ -42,4 +42,8 @@
   height: 1px;
   margin: 9px 0;
   overflow: hidden;
+}
+
+.fake-hyperlink {
+  cursor: pointer;
 }

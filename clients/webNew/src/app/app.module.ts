@@ -16,6 +16,7 @@ import { ModuleService } from './module.service';
 import { JsonService } from './json.service';
 import { ObjectService } from './object.service';
 import { MenuService } from './menu.service';
+import { NotificationService } from './notification.service';
 
 @NgModule({
   imports: [
@@ -35,7 +36,8 @@ import { MenuService } from './menu.service';
     ModuleService,
     ObjectService,
     JsonService,
-    MenuService
+    MenuService,
+    NotificationService
   ],
   bootstrap: [
     AppComponent

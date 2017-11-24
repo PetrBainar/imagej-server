@@ -1,8 +1,10 @@
-<div dropdown class="btn-group" *ngFor="let menuItem of retrievedMenuRoot?.children">
+<div dropdown class="btn-group" *ngFor="let topMenuItem of retrievedMenuRoot?.children">
   <button dropdownToggle type="button" class="btn btn-primary dropdown-toggle">
-    {{menuItem.label}}<span class="caret"></span>
+    {{topMenuItem.label}}<span class="caret"></span>
   </button>
   <ul *dropdownMenu class="dropdown-menu">
-    <app-component-menu-item [menuItem]="menuItem"></app-component-menu-item>
+    <ng-template ngFor let-menuItem [ngForOf]="topMenuItem?.children">
+      <app-component-menu-item [menuItem]="menuItem"></app-component-menu-item>
+    </ng-template>
   </ul>
 </div>
