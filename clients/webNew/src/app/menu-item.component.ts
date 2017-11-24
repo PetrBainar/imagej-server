@@ -13,9 +13,7 @@ export class MenuItemComponent {
 
   @Input() menuItem: FijiMenuItem;
 
-  constructor(private notificationService: NotificationService) {
-    this.notificationService = notificationService;
-  }
+  constructor(private notificationService: NotificationService) {  }
 
   updateListeners() {
     this.notificationService.menuItemClicked(this.menuItem);
