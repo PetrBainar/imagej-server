@@ -8,3 +8,12 @@
     </ng-template>
   </ul>
 </div>
+<br><br>
+<input #fileInput type="file"><button type="button" (click)="uploadImage()">Upload</button>
+<br><br>
+<div>List of uploaded objects</div>
+<div *ngFor="let object of uploadedObjects">
+  <div id="objectImgWrap">
+    <img id="objectImg" [src]="object.src" (click)="rotateImage(object.id)"/>
+  </div>
+</div>

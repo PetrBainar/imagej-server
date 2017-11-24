@@ -6,7 +6,6 @@ import { BsDropdownModule } from 'ngx-bootstrap';
 import { AppComponent } from './app.component';
 
 import { ModuleListComponent } from './module-list.component';
-import { ObjectListComponent } from './object-list.component';
 import { MenuComponent } from './menu.component';
 import { MenuItemComponent } from './menu-item.component';
 
@@ -28,7 +27,6 @@ import { NotificationService } from './notification.service';
   declarations: [
     AppComponent,
     ModuleListComponent,
-    ObjectListComponent,
     MenuComponent,
     MenuItemComponent
   ],
