@@ -4,6 +4,7 @@ import { JsonService } from './json.service';
 
 import { FijiModule } from './fiji-module';
 import { Observable } from 'rxjs/Observable';
+import { NotificationService } from './notification.service';
 
 @Injectable()
 export class ModuleService {
@@ -13,7 +14,9 @@ export class ModuleService {
 
   listUpdated: EventEmitter<Array<FijiModule>> = new EventEmitter();
 
-  constructor(private jsonService: JsonService) {  }
+  constructor(
+    private jsonService: JsonService,
+    private notificationService: NotificationService) {  }
 
   fetchModules(): void {
     this.availableModules = [];
@@ -24,6 +27,14 @@ export class ModuleService {
           component.availableModules.push(new FijiModule(iteration, result));
         });
         this.updateListeners();
+      });
+  }
+
+  fetchModule(module: string): void {
+    const service = this;
+    this.jsonService.getJsonData(this.modulesUrl + '/' + module)
+      .subscribe((details: Object) => {
+        service.notificationService.moduleDetailsRetrieved(details);
       });
   }
 

@@ -49,7 +49,11 @@ export class MenuComponent implements OnInit, OnDestroy {
       }));
     this.subscriptions.push(
       this.notificationService.menuItemClickedNotification.subscribe( (menuItem: FijiMenuItem) => {
-        this.executeCommand(menuItem.command);
+        this.handleMenuSelection(menuItem.command);
+      }));
+    this.subscriptions.push(
+      this.notificationService.retrievedModuleDetailsNotification.subscribe((details: Object) => {
+        this.renderModuleDetails(details);
       }));
     this.objectService.fetchObjects();
     this.moduleService.fetchModules();
@@ -60,7 +64,7 @@ export class MenuComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
 
-  executeCommand(commandName: string) {
+  handleMenuSelection(commandName: string) {
     const result: FijiModule = this.availableModules.find(module => module.rawName === 'command:' + commandName);
 
     if (result === null) {
@@ -70,16 +74,33 @@ export class MenuComponent implements OnInit, OnDestroy {
 
     if (this.activeObjectId === null) {
       alert('No object has been selected as active!');
+      return;
     }
 
-    if (result.rawName === this.moduleService.findImageRotationModule()) {
+    this.moduleService.fetchModule(result.rawName);
+
+    /* if (result.rawName === this.moduleService.findImageRotationModule()) {
       const moduleInputs = {'context': null, 'dataset': this.activeObjectId, 'angle': 90, 'datasetService': null};
       this.moduleService.executeModule(result.rawName, moduleInputs)
         .subscribe(null, null, () => this.objectService.fetchObjects());
       return;
-    }
+    } */
 
-    alert(result.rawName + ' module found, rendering not implmented yet!');
+    /* alert(result.rawName + ' module found, rendering not implmented yet!'); */
+  }
+
+  renderModuleDetails(details: Object) {
+    const inputs: Object[] = details['inputs'];
+    const outputs: Object[] = details['outputs'];
+
+    let message: string;
+    message = 'Following inputs are needed: ';
+
+    inputs.forEach(input => {
+      message += input['name'] + ', ';
+    });
+
+    alert(message);
   }
 
   uploadImage() {

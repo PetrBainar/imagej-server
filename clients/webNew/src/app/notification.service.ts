@@ -9,7 +9,14 @@ export class NotificationService {
   private clickedMenuItem = new Subject<FijiMenuItem>();
   public menuItemClickedNotification = this.clickedMenuItem.asObservable();
 
+  private retrievedModuleDetails = new Subject<Object>();
+  public retrievedModuleDetailsNotification = this.retrievedModuleDetails.asObservable();
+
   menuItemClicked(menuItem: FijiMenuItem) {
     this.clickedMenuItem.next(menuItem);
+  }
+
+  moduleDetailsRetrieved(details: Object) {
+    this.retrievedModuleDetails.next(details);
   }
 }
