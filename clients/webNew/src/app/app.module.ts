@@ -7,13 +7,14 @@ import { AppComponent } from './app.component';
 
 import { MenuComponent } from './menu.component';
 import { MenuItemComponent } from './menu-item.component';
+import { ModalDialogComponent } from './modal-dialog.component';
 
 import { AppRoutingModule } from './app-routing.module';
 
-import { ModuleService } from './module.service';
-import { JsonService } from './json.service';
 import { ObjectService } from './object.service';
+import { ModuleService } from './module.service';
 import { MenuService } from './menu.service';
+import { JsonService } from './json.service';
 import { NotificationService } from './notification.service';
 
 @NgModule({
@@ -26,7 +27,8 @@ import { NotificationService } from './notification.service';
   declarations: [
     AppComponent,
     MenuComponent,
-    MenuItemComponent
+    MenuItemComponent,
+    ModalDialogComponent
   ],
   providers: [
     ModuleService,

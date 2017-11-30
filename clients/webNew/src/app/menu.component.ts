@@ -90,7 +90,7 @@ export class MenuComponent implements OnInit, OnDestroy {
   }
 
   renderModuleDetails(details: Object) {
-    const inputs: Object[] = details['inputs'];
+    /* const inputs: Object[] = details['inputs'];
     const outputs: Object[] = details['outputs'];
 
     let message: string;
@@ -100,7 +100,9 @@ export class MenuComponent implements OnInit, OnDestroy {
       message += input['name'] + ', ';
     });
 
-    alert(message);
+    alert(message); */
+
+    this.notificationService.modalDialogRequested(new Object());
   }
 
   uploadImage() {

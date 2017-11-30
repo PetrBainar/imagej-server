@@ -23,6 +23,9 @@ export class NotificationService {
   private clickedMenuItem = new Subject<FijiMenuItem>();
   public menuItemClickedNotification = this.clickedMenuItem.asObservable();
 
+  private requestedModalDialog = new Subject<Object>();
+  public modalDialogRequestedNotification = this.requestedModalDialog.asObservable();
+
   objectsRetrieved(objects: FijiObject[]) {
     this.retrievedObjects.next(objects);
   }
@@ -41,5 +44,9 @@ export class NotificationService {
 
   menuItemClicked(menuItem: FijiMenuItem) {
     this.clickedMenuItem.next(menuItem);
+  }
+
+  modalDialogRequested(dialog: Object) {
+    this.requestedModalDialog.next(dialog);
   }
 }
