@@ -1,24 +1,24 @@
-import { Injectable, EventEmitter } from '@angular/core';
+import { Injectable } from '@angular/core';
 
 import { JsonService } from './json.service';
+import { NotificationService } from './notification.service';
+
 import { FijiMenuItem } from './fiji-menu-item';
 
 @Injectable()
 export class MenuService {
 
   private menuUrl = 'http://localhost:8080/admin/menuNew';
-  private retrievedMenuRoot: FijiMenuItem;
 
-  menuUpdated: EventEmitter<FijiMenuItem> = new EventEmitter();
-
-  constructor(private jsonService: JsonService) {  }
+  constructor(
+    private jsonService: JsonService,
+    private notificationService: NotificationService) {  }
 
   fetchMenu(): void {
-    const component = this;
+    const service = this;
     this.jsonService.getJsonData(this.menuUrl)
       .subscribe((results: Object) => {
-        component.retrievedMenuRoot = component.extractMenu(results);
-      this.updateListeners();
+        service.notificationService.menuRootRetrieved(service.extractMenu(results));
     });
   }
 
@@ -31,9 +31,5 @@ export class MenuService {
       menuItem.AddChild(this.extractMenu(menuItemCandidate[key]));
     }
     return menuItem;
-  }
-
-  private updateListeners(): void {
-    this.menuUpdated.emit(this.retrievedMenuRoot);
   }
 }

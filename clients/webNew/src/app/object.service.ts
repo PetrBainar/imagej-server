@@ -1,6 +1,7 @@
-import {Injectable, EventEmitter } from '@angular/core';
+import { Injectable } from '@angular/core';
 
 import { JsonService } from './json.service';
+import { NotificationService } from './notification.service';
 
 import { FijiObject } from './fiji-object';
 
@@ -9,12 +10,10 @@ export class ObjectService {
 
   private objectsUrl = 'http://localhost:8080/objects';
   private objectsUrlUpload = 'http://localhost:8080/objects/upload';
-  private uploadedObjects: Array<FijiObject> = [];
-  private timestamp: number;
 
-  listUpdated: EventEmitter<Array<FijiObject>> = new EventEmitter();
-
-  constructor(private jsonService: JsonService) {  }
+  constructor(
+    private jsonService: JsonService,
+    private notificationService: NotificationService) {  }
 
   uploadObject(file: File): void {
     const formData = new FormData();
@@ -24,19 +23,15 @@ export class ObjectService {
   }
 
   fetchObjects(): void {
-    this.uploadedObjects = [];
-    this.timestamp = new Date().getTime();
+    const uploadedObjects: FijiObject[] = [];
+    const timestamp = new Date().getTime();
     this.jsonService.getJsonData(this.objectsUrl)
       .subscribe((results: string[]) => {
-        const component = this;
+        const service = this;
         results.forEach((result: string) => {
-          component.uploadedObjects.push(new FijiObject(component.objectsUrl, result, component.timestamp));
+          uploadedObjects.push(new FijiObject(service.objectsUrl, result, timestamp));
         });
-        this.updateListeners();
+        service.notificationService.objectsRetrieved(uploadedObjects);
       });
-  }
-
-  private updateListeners(): void {
-    this.listUpdated.emit(this.uploadedObjects);
   }
 }

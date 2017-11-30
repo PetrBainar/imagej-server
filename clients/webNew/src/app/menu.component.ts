@@ -36,15 +36,15 @@ export class MenuComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.subscriptions.push(
-      this.objectService.listUpdated.subscribe(list => {
+      this.notificationService.objectsRetrievedNotification.subscribe(list => {
         this.uploadedObjects = list;
       }));
     this.subscriptions.push(
-      this.moduleService.listUpdated.subscribe(list => {
+      this.notificationService.modulesRetrievedNotification.subscribe(list => {
         this.availableModules = list;
       }));
     this.subscriptions.push(
-      this.menuService.menuUpdated.subscribe((menuRoot: FijiMenuItem) => {
+      this.notificationService.menuRootRetrievedNotification.subscribe((menuRoot: FijiMenuItem) => {
         this.retrievedMenuRoot = menuRoot;
       }));
     this.subscriptions.push(
@@ -79,7 +79,7 @@ export class MenuComponent implements OnInit, OnDestroy {
 
     this.moduleService.fetchModule(result.rawName);
 
-    /* if (result.rawName === this.moduleService.findImageRotationModule()) {
+    /* if (result.rawName === this.findImageRotationModule()) {
       const moduleInputs = {'context': null, 'dataset': this.activeObjectId, 'angle': 90, 'datasetService': null};
       this.moduleService.executeModule(result.rawName, moduleInputs)
         .subscribe(null, null, () => this.objectService.fetchObjects());
@@ -114,5 +114,12 @@ export class MenuComponent implements OnInit, OnDestroy {
 
   setObjectActive(imageId: string) {
     this.activeObjectId = imageId;
+  }
+
+  /* TODO: Remove as soon as possible */
+  findImageRotationModule(): string {
+    const imageRotationModule: FijiModule =
+      this.availableModules.find((item: FijiModule) => (item.clazz === 'RotateImageXY'));
+    return imageRotationModule.rawName;
   }
 }
