@@ -11,6 +11,7 @@ import { FijiObject } from './fiji-object';
 import { FijiModule } from './fiji-module';
 import { FijiMenuItem } from './fiji-menu-item';
 import { FijiDialog } from './fiji-dialog';
+import { FijiModuleIO } from './fiji-module-io';
 
 @Component({
   selector: 'app-component-menu',
@@ -50,11 +51,7 @@ export class MenuComponent implements OnInit, OnDestroy {
       }));
     this.subscriptions.push(
       this.notificationService.menuItemClickedNotification.subscribe( (menuItem: FijiMenuItem) => {
-        this.handleMenuSelection(menuItem.command);
-      }));
-    this.subscriptions.push(
-      this.notificationService.retrievedModuleDetailsNotification.subscribe((details: Object) => {
-        this.renderModuleDetails(details);
+        this.handleMenuSelection(menuItem);
       }));
     this.objectService.fetchObjects();
     this.moduleService.fetchModules();
@@ -65,10 +62,10 @@ export class MenuComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
 
-  handleMenuSelection(commandName: string) {
-    const result: FijiModule = this.availableModules.find(module => module.rawName === 'command:' + commandName);
+  async handleMenuSelection(menuItem: FijiMenuItem) {
+    const module: FijiModule = this.availableModules.find(m => m.rawName === 'command:' + menuItem.command);
 
-    if (result === null) {
+    if (module === null) {
       alert('No corresponding module found!');
       return;
     }
@@ -78,32 +75,31 @@ export class MenuComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.moduleService.fetchModule(result.rawName);
+    const detailedModule = await this.moduleService.fetchModuleDetails(module);
 
-    /* if (result.rawName === this.findImageRotationModule()) {
-      const moduleInputs = {'context': null, 'dataset': this.activeObjectId, 'angle': 90, 'datasetService': null};
-      this.moduleService.executeModule(result.rawName, moduleInputs)
-        .subscribe(null, null, () => this.objectService.fetchObjects());
-      return;
-    } */
+    if (!detailedModule.hasDetails()) {
+      alert('Module details are not available!');
+    }
 
-    /* alert(result.rawName + ' module found, rendering not implmented yet!'); */
+    const header = module.clazz;
+    const body = this.composeModuleInputs(module.details.inputs);
+
+    this.notificationService.modalDialogRequested(new FijiDialog(header, body, 'Ahoj'));
   }
 
-  renderModuleDetails(details: Object) {
-    /* const inputs: Object[] = details['inputs'];
-    const outputs: Object[] = details['outputs'];
-
-    let message: string;
-    message = 'Following inputs are needed: ';
-
-    inputs.forEach(input => {
-      message += input['name'] + ', ';
+  private composeModuleInputs(inputs: FijiModuleIO[]): string {
+    let formattedElements = '';
+    inputs.forEach(i => {
+      switch (i.genericType) {
+        default:
+          formattedElements += this.addUnresolvedType(i);
+      }
     });
+    return formattedElements;
+  }
 
-    alert(message); */
-
-    this.notificationService.modalDialogRequested(new FijiDialog('Ahoj', 'Ahoj', 'Ahoj'));
+  private addUnresolvedType(inputParameter: FijiModuleIO): string {
+    return '<h2>' + inputParameter.name + '</h2>';
   }
 
   uploadImage() {
@@ -117,12 +113,5 @@ export class MenuComponent implements OnInit, OnDestroy {
 
   setObjectActive(imageId: string) {
     this.activeObjectId = imageId;
-  }
-
-  /* TODO: Remove as soon as possible */
-  findImageRotationModule(): string {
-    const imageRotationModule: FijiModule =
-      this.availableModules.find((item: FijiModule) => (item.clazz === 'RotateImageXY'));
-    return imageRotationModule.rawName;
   }
 }

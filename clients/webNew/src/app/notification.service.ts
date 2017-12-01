@@ -15,9 +15,6 @@ export class NotificationService {
   private retrievedModules = new Subject<FijiModule[]>();
   public modulesRetrievedNotification = this.retrievedModules.asObservable();
 
-  private retrievedModuleDetails = new Subject<Object>();
-  public retrievedModuleDetailsNotification = this.retrievedModuleDetails.asObservable();
-
   private retrievedMenuRoot = new Subject<FijiMenuItem>();
   public menuRootRetrievedNotification = this.retrievedMenuRoot.asObservable();
 
@@ -33,10 +30,6 @@ export class NotificationService {
 
   modulesRetrieved(modules: FijiModule[]) {
     this.retrievedModules.next(modules);
-  }
-
-  moduleDetailsRetrieved(details: Object) {
-    this.retrievedModuleDetails.next(details);
   }
 
   menuRootRetrieved(menuRoot: FijiMenuItem) {
