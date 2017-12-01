@@ -3,6 +3,7 @@ import { Subject } from 'rxjs/Subject';
 import { FijiObject } from './fiji-object';
 import { FijiModule } from './fiji-module';
 import { FijiMenuItem } from './fiji-menu-item';
+import { FijiDialog } from './fiji-dialog';
 
 @Injectable()
 export class NotificationService {
@@ -23,7 +24,7 @@ export class NotificationService {
   private clickedMenuItem = new Subject<FijiMenuItem>();
   public menuItemClickedNotification = this.clickedMenuItem.asObservable();
 
-  private requestedModalDialog = new Subject<Object>();
+  private requestedModalDialog = new Subject<FijiDialog>();
   public modalDialogRequestedNotification = this.requestedModalDialog.asObservable();
 
   objectsRetrieved(objects: FijiObject[]) {
@@ -46,7 +47,7 @@ export class NotificationService {
     this.clickedMenuItem.next(menuItem);
   }
 
-  modalDialogRequested(dialog: Object) {
+  modalDialogRequested(dialog: FijiDialog) {
     this.requestedModalDialog.next(dialog);
   }
 }

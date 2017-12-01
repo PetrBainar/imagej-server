@@ -10,14 +10,23 @@ export class ModalDialogComponent {
   public visible = false;
   public visibleAnimate = false;
 
-  public show(): void {
+  public header = '';
+  public body = '';
+
+  public show(header: string, body: string): void {
+    this.header = header;
+    this.body = body;
     this.visible = true;
     setTimeout(() => this.visibleAnimate = true, 100);
   }
 
   public hide(): void {
     this.visibleAnimate = false;
-    setTimeout(() => this.visible = false, 300);
+    setTimeout(() => {
+      this.visible = false;
+      this.header = '';
+      this.body = '';
+      }, 300);
   }
 
   public onContainerClicked(event: MouseEvent): void {

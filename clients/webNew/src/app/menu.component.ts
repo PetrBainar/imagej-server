@@ -10,6 +10,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { FijiObject } from './fiji-object';
 import { FijiModule } from './fiji-module';
 import { FijiMenuItem } from './fiji-menu-item';
+import { FijiDialog } from './fiji-dialog';
 
 @Component({
   selector: 'app-component-menu',
@@ -102,7 +103,7 @@ export class MenuComponent implements OnInit, OnDestroy {
 
     alert(message); */
 
-    this.notificationService.modalDialogRequested(new Object());
+    this.notificationService.modalDialogRequested(new FijiDialog('Ahoj', 'Ahoj', 'Ahoj'));
   }
 
   uploadImage() {
