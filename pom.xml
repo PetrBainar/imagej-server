@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
@@ -91,7 +90,7 @@
 		<main-class>net.imagej.server.Main</main-class>
 		<license.licenseName>apache_v2</license.licenseName>
 		<license.copyrightOwners>Board of Regents of the University of
-	Wisconsin-Madison.</license.copyrightOwners>
+Wisconsin-Madison.</license.copyrightOwners>
 		<license.projectName>ImageJ server for RESTful access to ImageJ.</license.projectName>
 		<dropwizard.version>1.0.2</dropwizard.version>
 
@@ -122,9 +121,9 @@
 			<artifactId>imagej</artifactId>
 			<exclusions>
 				<!--
-				NB: Conflicts with org.slf4j:jcl-over-slf which is brought in by 
-				io.dropwizard:dropwizard-logging via io.dropwizard:dropwizard-core. See also: 
-				http://jira.qos.ch/browse/SLF4J-250
+				NB: Conflicts with org.slf4j:jcl-over-slf which is brought in by
+				io.dropwizard:dropwizard-logging via io.dropwizard:dropwizard-core.
+				See also: http://jira.qos.ch/browse/SLF4J-250
 				-->
 				<exclusion>
 					<groupId>commons-logging</groupId>
