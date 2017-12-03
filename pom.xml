@@ -55,7 +55,10 @@
 		</developer>
 	</developers>
 	<contributors>
-		<!-- NB: Need at least one element to override the parent. See: https://issues.apache.org/jira/browse/MNG-5220 -->
+		<!--
+		NB: Need at least one element to override the parent.
+		See: https://issues.apache.org/jira/browse/MNG-5220
+		-->
 		<contributor>
 			<name>None</name>
 		</contributor>
@@ -88,7 +91,7 @@
 		<main-class>net.imagej.server.Main</main-class>
 		<license.licenseName>apache_v2</license.licenseName>
 		<license.copyrightOwners>Board of Regents of the University of
-			Wisconsin-Madison.</license.copyrightOwners>
+	Wisconsin-Madison.</license.copyrightOwners>
 		<license.projectName>ImageJ server for RESTful access to ImageJ.</license.projectName>
 		<dropwizard.version>1.0.2</dropwizard.version>
 
@@ -118,9 +121,11 @@
 			<groupId>net.imagej</groupId>
 			<artifactId>imagej</artifactId>
 			<exclusions>
-				<!-- NB: Conflicts with org.slf4j:jcl-over-slf which is brought in by 
-					io.dropwizard:dropwizard-logging via io.dropwizard:dropwizard-core. See also: 
-					http://jira.qos.ch/browse/SLF4J-250 -->
+				<!--
+				NB: Conflicts with org.slf4j:jcl-over-slf which is brought in by 
+				io.dropwizard:dropwizard-logging via io.dropwizard:dropwizard-core. See also: 
+				http://jira.qos.ch/browse/SLF4J-250
+				-->
 				<exclusion>
 					<groupId>commons-logging</groupId>
 					<artifactId>commons-logging</artifactId>
