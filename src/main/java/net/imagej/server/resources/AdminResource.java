@@ -21,11 +21,6 @@
 
 package net.imagej.server.resources;
 
-import java.awt.Menu;
-import java.awt.MenuBar;
-import java.awt.MenuItem;
-
-import java.util.Hashtable;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -38,7 +33,6 @@ import javax.ws.rs.core.Response;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import io.dropwizard.setup.Environment;
-import net.imagej.legacy.IJ1Helper;
 import net.imagej.legacy.LegacyService;
 import net.imagej.server.services.JsonService;
 
@@ -53,9 +47,6 @@ import org.scijava.module.ModuleInfo;
  */
 @Path("/admin")
 public class AdminResource {
-
-	@Inject
-	private LegacyService legacyService;
 	
 	@Inject
 	private MenuService menuService;
@@ -65,39 +56,6 @@ public class AdminResource {
 	
 	@Inject
 	private Environment env;	
-	
-	@GET
-	@Path("menu")
-	public String menu() throws JsonProcessingException {
-		IJ1Helper helper = legacyService.getIJ1Helper(); 
-		MenuBar menuBar = helper.getMenuBar();
-		Hashtable<String, String> commandDictionary = helper.getCommands();
-		
-		Map<String, Object> map = new LinkedHashMap<>();
-		map.put("Level", 0);
-		map.put("Label", "Root");
-		map.put("Command", null);
-				
-		for (int it = 0; it < menuBar.getMenuCount(); it++) {
-			map.put("Child"+it, getMenuRecursively(1, menuBar.getMenu(it), commandDictionary));
-		}
-		
-		return jsonService.parseObject(map);
-	}
-	
-	private Map<String, Object> getMenuRecursively(int level, MenuItem menuItem, Hashtable<String, String> commandDictionary) {
-		Map<String, Object> result = new LinkedHashMap<>();
-		result.put("Level", level);
-		result.put("Label", menuItem.getLabel());
-		result.put("Command", commandDictionary.get(menuItem.getActionCommand()));
-		if (menuItem instanceof Menu) {
-			Menu menu = (Menu)menuItem;
-			for (int it = 0; it < menu.getItemCount(); it++) {
-				result.put("Child"+it, getMenuRecursively(level+1, menu.getItem(it), commandDictionary));
-			}
-		}
-		return result;
-	}
 	
 	@GET
 	@Path("menuNew")

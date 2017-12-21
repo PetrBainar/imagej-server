@@ -5,7 +5,8 @@
 /tmp
 /out-tsc
 
-# dependencies (NB: node_modules are deliberately under source control)
+# dependencies
+/node_modules
 
 # IDEs and editors
 /.idea

@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { FijiMenuItem } from './fiji-menu-item';
 
-import { NotificationService } from './notification.service';
+import { NotificationService } from './services/notification.service';
 
 @Component({
   selector: 'app-component-menu-item',

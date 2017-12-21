@@ -1,11 +1,16 @@
 export class FijiModuleIO {
-  public name: string;
-  public label: string;
-  public genericType: string;
-
-  constructor(name: string, label: string, genericType: string) {
-    this.name = name;
-    this.label = label;
-    this.genericType = genericType;
+  constructor(
+    public choices: string[],
+    public defaultValue: any,
+    public genericType: string,
+    public label: string,
+    public maximumValue: string,
+    public minimumValue: string,
+    public name: string,
+    public required: boolean,
+    public softMaximum: string,
+    public softMinimum: string,
+    public stepSize: string,
+    public widgetStyle: string) {
   }
 }

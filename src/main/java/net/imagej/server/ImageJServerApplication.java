@@ -30,8 +30,6 @@ import java.util.EnumSet;
 import javax.servlet.DispatcherType;
 import javax.servlet.FilterRegistration;
 
-import net.imagej.legacy.LegacyService;
-
 import net.imagej.server.health.ImageJServerHealthCheck;
 import net.imagej.server.resources.AdminResource;
 import net.imagej.server.resources.ModulesResource;
@@ -63,8 +61,6 @@ public class ImageJServerApplication extends
 
 	private final JsonService jsonService;
 	
-	private final LegacyService legacyService;
-	
 	private final MenuService menuService;
 	
 	private Environment env;
@@ -73,7 +69,6 @@ public class ImageJServerApplication extends
 		this.ctx = ctx;
 		objectService = new DefaultObjectService();
 		jsonService = new DefaultJsonService(objectService);
-		legacyService = ctx.getService(LegacyService.class);
 		menuService = ctx.getService(MenuService.class);
 	}
 
@@ -131,7 +126,6 @@ public class ImageJServerApplication extends
 				bind(env).to(Environment.class);
 				bind(objectService).to(ObjectService.class);
 				bind(jsonService).to(JsonService.class);
-				bind(legacyService).to(LegacyService.class);
 				bind(menuService).to(MenuService.class);
 			}
 
